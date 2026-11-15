@@ -1,0 +1,182 @@
+Implement a greedy algorithm for the Job Sequencing problem with deadlines.
+
+import java.util.*;
+
+class Job {
+    char id;
+    int deadline;
+    int profit;
+
+    Job(char id, int deadline, int profit) {
+        this.id = id;
+        this.deadline = deadline;
+        this.profit = profit;
+    }
+}
+
+public class JobSequencing {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of jobs: ");
+        int n = sc.nextInt();
+
+        Job[] jobs = new Job[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.println("\nEnter details of Job " + (i + 1));
+
+            System.out.print("Job ID: ");
+            char id = sc.next().charAt(0);
+
+            System.out.print("Deadline: ");
+            int deadline = sc.nextInt();
+
+            System.out.print("Profit: ");
+            int profit = sc.nextInt();
+
+            jobs[i] = new Job(id, deadline, profit);
+        }
+
+        Arrays.sort(jobs, (a, b) -> b.profit - a.profit);
+
+        int maxDeadline = 0;
+
+        for (Job job : jobs) {
+            maxDeadline = Math.max(maxDeadline, job.deadline);
+        }
+
+        char[] result = new char[maxDeadline];
+        boolean[] slot = new boolean[maxDeadline];
+
+        int totalProfit = 0;
+
+        for (Job job : jobs) {
+            for (int j = Math.min(maxDeadline, job.deadline) - 1; j >= 0; j--) {
+
+                if (!slot[j]) {
+                    result[j] = job.id;
+                    slot[j] = true;
+                    totalProfit += job.profit;
+                    break;
+                }
+            }
+        }
+
+        System.out.println("\nScheduled Jobs:");
+
+        for (int i = 0; i < maxDeadline; i++) {
+            if (slot[i]) {
+                System.out.print(result[i] + " ");
+            }
+        }
+
+        System.out.println("\nMaximum Profit: " + totalProfit);
+
+        sc.close();
+    }
+}
+
+------------------------------------------------------------------------------------------
+
+Customer Segmentation on sales_data_sample.csv
+using K-Means or hierarchical clustering; find optimal clusters with the elbow method.
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+df = pd.read_csv("sales_data_sample.csv", encoding="latin1")
+
+print("Dataset Shape:", df.shape)
+print(df.head())
+
+df["ORDERDATE"] = pd.to_datetime(df["ORDERDATE"])
+
+reference_date = df["ORDERDATE"].max() + pd.Timedelta(days=1)
+
+customer_data = df.groupby("CUSTOMERNAME").agg({
+    "ORDERDATE": lambda x: (reference_date - x.max()).days,
+    "ORDERNUMBER": "nunique",
+    "SALES": "sum",
+    "QUANTITYORDERED": "sum"
+})
+
+customer_data.columns = [
+    "Recency",
+    "Frequency",
+    "Monetary",
+    "TotalQuantity"
+]
+
+print("\nCustomer Data:")
+print(customer_data.head())
+
+X = np.log1p(customer_data)
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+wcss = []
+
+for i in range(1, 11):
+    kmeans = KMeans(
+        n_clusters=i,
+        random_state=42,
+        n_init=10
+    )
+    kmeans.fit(X_scaled)
+    wcss.append(kmeans.inertia_)
+
+plt.figure(figsize=(8, 5))
+plt.plot(range(1, 11), wcss, marker="o")
+plt.title("Elbow Method")
+plt.xlabel("Number of Clusters")
+plt.ylabel("WCSS")
+plt.xticks(range(1, 11))
+plt.grid(True)
+plt.show()
+
+optimal_k = 3
+
+kmeans = KMeans(
+    n_clusters=optimal_k,
+    random_state=42,
+    n_init=10
+)
+
+customer_data["Cluster"] = kmeans.fit_predict(X_scaled)
+
+print("\nCustomer Segmentation:")
+print(customer_data.head(10))
+
+print("\nNumber of Customers in Each Cluster:")
+print(customer_data["Cluster"].value_counts().sort_index())
+
+print("\nCluster Analysis:")
+print(customer_data.groupby("Cluster").mean().round(2))
+
+plt.figure(figsize=(8, 5))
+sns.scatterplot(
+    data=customer_data,
+    x="Frequency",
+    y="Monetary",
+    hue="Cluster",
+    palette="Set1",
+    s=100
+)
+plt.title("Customer Segmentation using K-Means")
+plt.xlabel("Frequency")
+plt.ylabel("Total Sales")
+plt.show()
+
+customer_data.to_csv("customer_segments.csv")
+
+print("\nCustomer segmentation completed successfully!")
+print("Results saved in customer_segments.csv")

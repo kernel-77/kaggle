@@ -1,0 +1,1310 @@
+========================================================================================
+LP-III (410246) - COMPLETE PRACTICAL EXAM THEORY
+========================================================================================
+Design and Analysis of Algorithms | Machine Learning | Blockchain Technology
+
+========================================================================================
+OVERVIEW
+========================================================================================
+
+Your practicals (Laboratory Practice III, 410246) are divided into three groups:
+
+  1. Group A - Design and Analysis of Algorithms (DAA): 6 practicals.
+  2. Group B - Machine Learning / Data Science: 5 practicals.
+  3. Group C - Blockchain Technology: 4 practicals.
+
+Total: 15 practicals. There are 3 sets of chits. Similar practicals are sorted subject-
+wise so you can study one concept at a time.
+
+----------------------------------------------------------------------------------------
+How each practical is covered
+----------------------------------------------------------------------------------------
+
+  * Title: Name of the practical.
+  * Objective: What we want to achieve.
+  * Theory: Explanation of the concept.
+  * Algorithm: Step-by-step implementation logic.
+  * Important points: Formulas, complexities and viva points.
+  * Conclusion: What we achieve after performing the practical.
+
+========================================================================================
+GROUP A - DESIGN AND ANALYSIS OF ALGORITHMS (DAA)
+========================================================================================
+
+6 practicals. These mainly cover Greedy Algorithms, Dynamic Programming and
+Backtracking.
+
+----------------------------------------------------------------------------------------
+A1. Fibonacci Series and Computational Steps
+----------------------------------------------------------------------------------------
+
+Title: Generate Fibonacci Numbers and Determine the Number of Computational Steps
+Required.
+
+Objective:
+  * To generate Fibonacci numbers using an algorithm.
+  * To understand recursive and iterative approaches.
+  * To calculate the number of computational steps and analyze time complexity.
+
+Theory:
+
+The Fibonacci series is a sequence in which every number is the sum of the previous two
+numbers. The series starts with: 0, 1, 1, 2, 3, 5, 8, 13, 21, ...
+
+Recurrence:
+      F(n) = F(n-1) + F(n-2)
+Base conditions:
+      F(0) = 0,  F(1) = 1
+
+There are two common approaches:
+
+1. Recursive approach
+  * A function calls itself to calculate the previous two Fibonacci numbers.
+  * It repeats calculations for the same values.
+  * It has exponential time complexity.
+
+2. Iterative approach
+  * Uses a loop to calculate the next Fibonacci number.
+  * Stores only the previous two values.
+  * It is more efficient than recursion.
+
+Algorithm (Iterative):
+  1. Start.
+  2. Read the number of terms n.
+  3. Initialize a = 0, b = 1.
+  4. Print a and b when applicable.
+  5. Calculate c = a + b.
+  6. Update a = b and b = c.
+  7. Repeat until n terms are generated.
+  8. Count the computational steps.
+  9. Stop.
+
+Important points:
+  +------------------+-----------------+------------------+
+  | Approach         | Time complexity | Space complexity |
+  +------------------+-----------------+------------------+
+  | Recursive        | O(2^n)          | O(n)             |
+  | Iterative        | O(n)            | O(1)             |
+  | DP / Memoization | O(n)            | O(n)             |
+  +------------------+-----------------+------------------+
+
+  * Recursion uses a function call stack.
+  * Iteration avoids repeated calculations.
+  * Dynamic programming stores previously calculated results.
+  * Computational steps are the basic operations performed by an algorithm.
+
+Conclusion: Thus, we successfully generated the Fibonacci series and analyzed its
+computational steps. We observed that the iterative approach is more efficient than the
+simple recursive approach.
+
+----------------------------------------------------------------------------------------
+A2. Job Sequencing with Deadlines
+----------------------------------------------------------------------------------------
+
+Title: Implement a Greedy Algorithm for the Job Sequencing Problem with Deadlines.
+
+Objective:
+  * To implement the Job Sequencing problem using the Greedy method.
+  * To maximize total profit by scheduling jobs before their deadlines.
+  * To understand the working of greedy algorithms.
+
+Theory:
+
+Job Sequencing is a scheduling problem in which every job has: (1) Job ID, (2) Deadline,
+(3) Profit. Each job requires one unit of time, and profit is earned only when the job
+is completed before or on its deadline. The objective is to schedule jobs so that the
+maximum possible profit is obtained.
+
+Greedy approach: Select the job having the highest profit first and schedule it in the
+latest available time slot before its deadline.
+
+Example:
+  +-----+----------+--------+
+  | Job | Deadline | Profit |
+  +-----+----------+--------+
+  | J1  | 2        | 100    |
+  | J2  | 1        | 50     |
+  | J3  | 2        | 10     |
+  | J4  | 1        | 20     |
+  | J5  | 3        | 30     |
+  +-----+----------+--------+
+
+Sort jobs by decreasing profit: J1 -> J2 -> J5 -> J4 -> J3
+
+One optimal schedule:
+  * Slot 1: J2
+  * Slot 2: J1
+  * Slot 3: J5
+
+Total profit = 50 + 100 + 30 = 180.
+
+Algorithm:
+  1. Start.
+  2. Read the number of jobs.
+  3. Enter job ID, deadline and profit.
+  4. Sort all jobs in descending order of profit.
+  5. Find the maximum deadline.
+  6. Create empty time slots.
+  7. For each job, check for an available slot from its deadline backwards.
+  8. If an empty slot is found, schedule the job.
+  9. Calculate total profit.
+  10. Display the scheduled jobs and maximum profit.
+  11. Stop.
+
+Important points:
+  * Technique: Greedy Algorithm.
+  * Objective: Maximize profit.
+  * Jobs are sorted by decreasing profit.
+  * Each job takes one unit of time.
+  * A job must be completed before or on its deadline.
+  * Time complexity with simple slot searching: O(n log n + nD), where D is the maximum
+      deadline.
+  * Space complexity: O(D), excluding input storage.
+
+Conclusion: Thus, we implemented Job Sequencing using the Greedy method and obtained an
+optimal job schedule that maximizes the total profit under the given deadlines.
+
+----------------------------------------------------------------------------------------
+A3. Fractional Knapsack Problem
+----------------------------------------------------------------------------------------
+
+Title: Design and Implement a Greedy Algorithm for the Fractional Knapsack Problem.
+
+Objective:
+  * To implement the Fractional Knapsack problem using the Greedy method.
+  * To maximize the total value within the given capacity.
+  * To understand the importance of the value-to-weight ratio.
+
+Theory:
+
+The Knapsack problem involves selecting items to maximize total profit without exceeding
+the capacity of a bag. Each item has a Weight (W) and a Value (V). In Fractional
+Knapsack, we are allowed to take a fraction of an item. The greedy strategy selects
+items according to their value-to-weight ratio.
+
+      Ratio = Value / Weight
+
+The item having the highest ratio is selected first.
+
+Example: Knapsack capacity = 50 kg.
+  +------+-------+--------+-------+
+  | Item | Value | Weight | Ratio |
+  +------+-------+--------+-------+
+  | I1   | 60    | 10     | 6     |
+  | I2   | 100   | 20     | 5     |
+  | I3   | 120   | 30     | 4     |
+  +------+-------+--------+-------+
+
+Selection:
+  * Take I1 completely = 60.
+  * Take I2 completely = 100.
+  * Remaining capacity = 20 kg.
+  * Take 20/30 fraction of I3 = 80.
+
+      Total profit = 60 + 100 + 80 = 240
+
+Algorithm:
+  1. Start.
+  2. Read the number of items and knapsack capacity.
+  3. Enter weight and value of each item.
+  4. Calculate value/weight ratio.
+  5. Sort items in descending order of ratio.
+  6. Select the item with the highest ratio.
+  7. If the complete item fits, take it.
+  8. Otherwise, take the required fraction.
+  9. Update remaining capacity.
+  10. Repeat until capacity becomes zero.
+  11. Display maximum profit.
+  12. Stop.
+
+Important points:
+  * Technique: Greedy Algorithm.
+  * Items can be divided into fractions.
+  * Selection is based on maximum value/weight ratio.
+  * Sorting complexity: O(n log n). Overall time complexity: O(n log n).
+  * Fractional Knapsack gives an optimal solution using the greedy method.
+
+Conclusion: Thus, we successfully implemented the Fractional Knapsack problem using the
+Greedy approach and maximized the total profit within the given capacity.
+
+----------------------------------------------------------------------------------------
+A4. 0/1 Knapsack Problem
+----------------------------------------------------------------------------------------
+
+Title: Implement the 0/1 Knapsack Problem Using Dynamic Programming or Branch and Bound.
+
+Objective:
+  * To solve the 0/1 Knapsack problem.
+  * To maximize profit without exceeding the capacity.
+  * To understand Dynamic Programming or Branch and Bound techniques.
+
+Theory:
+
+The 0/1 Knapsack problem is an optimization problem in which we select items to maximize
+total value without exceeding the given capacity. Unlike Fractional Knapsack, an item
+cannot be divided. Every item has only two possibilities: 1 = select the complete item,
+0 = do not select the item.
+
+Dynamic Programming approach: Construct a two-dimensional DP table where rows represent
+items, columns represent knapsack capacities, and each cell stores the maximum profit
+possible.
+
+Recurrence relation:
+      DP[i][w] = DP[i-1][w],   if wt(i) > w
+      DP[i][w] = max( DP[i-1][w],  val(i) + DP[i-1][w - wt(i)] ),   if wt(i) <= w
+Base conditions:
+      DP[0][w] = 0   and   DP[i][0] = 0
+
+Algorithm (Dynamic Programming):
+  1. Start.
+  2. Read the number of items and capacity.
+  3. Enter weights and values.
+  4. Create a DP table of size (n+1) x (W+1).
+  5. Initialize the first row and column with zero.
+  6. For every item and capacity:
+      - If item weight exceeds capacity, copy the previous value.
+      - Otherwise, calculate the maximum of including and excluding the item.
+  7. Store the result in the DP table.
+  8. Display DP[n][W].
+  9. Stop.
+
+Branch and Bound approach: Explores possible solutions using a state-space tree.
+  * Branch: Divide the problem into include and exclude decisions.
+  * Bound: Calculate an upper bound on the possible profit.
+  * Prune: Discard branches that cannot improve the current best solution.
+
+Important points:
+  +-----------------+--------------------------+---------------------+
+  | Feature         | 0/1 Knapsack             | Fractional Knapsack |
+  +-----------------+--------------------------+---------------------+
+  | Item division   | Not allowed              | Allowed             |
+  | Main technique  | DP / Branch and Bound    | Greedy              |
+  | Selection       | Complete item or nothing | Any fraction        |
+  | Greedy optimal? | Not always               | Yes                 |
+  +-----------------+--------------------------+---------------------+
+
+  * DP time complexity: O(nW). DP space complexity: O(nW).
+  * It is called pseudo-polynomial time because complexity depends on the numerical
+      capacity W.
+
+Conclusion: Thus, we implemented the 0/1 Knapsack problem using Dynamic Programming or
+Branch and Bound to obtain the maximum possible profit without exceeding the capacity.
+
+----------------------------------------------------------------------------------------
+A5. Binomial Coefficients Using Dynamic Programming
+----------------------------------------------------------------------------------------
+
+Title: Calculate Binomial Coefficients Using Dynamic Programming.
+
+Objective:
+  * To calculate binomial coefficients using Dynamic Programming.
+  * To understand Pascal's Triangle.
+  * To reduce repeated calculations using previously computed results.
+
+Theory:
+
+A binomial coefficient represents the number of ways to select r objects from n objects.
+      nCr = n! / ( r! (n-r)! )
+For example: 5C2 = 5! / (2! 3!) = 10
+
+Instead of calculating factorials repeatedly, we use Dynamic Programming.
+
+Recurrence relation:
+      C(n, r) = C(n-1, r-1) + C(n-1, r)
+Base conditions:
+      C(n, 0) = 1   and   C(n, n) = 1
+
+These values form Pascal's Triangle.
+
+Example - Pascal's Triangle:
+            1
+          1   1
+        1   2   1
+      1   3   3   1
+    1   4   6   4   1
+5C2 = 10
+
+Algorithm:
+  1. Start.
+  2. Read n and r.
+  3. Create a DP table.
+  4. Set C[i][0] = 1.
+  5. Set C[i][i] = 1.
+  6. For each remaining position, calculate C[i][j] = C[i-1][j-1] + C[i-1][j].
+  7. Display C[n][r].
+  8. Stop.
+
+Important points:
+  * Technique: Dynamic Programming.
+  * Pascal's Triangle is used.
+  * Each value depends on two values in the previous row.
+  * Time complexity: O(nr) when computing only up to r.
+  * Space complexity: O(nr) for the full DP table. One-dimensional DP can reduce space
+      to O(r).
+
+Conclusion: Thus, we successfully calculated binomial coefficients using Dynamic
+Programming and reduced repeated computations using previously stored results.
+
+----------------------------------------------------------------------------------------
+A6. 8-Queens Problem Using Backtracking
+----------------------------------------------------------------------------------------
+
+Title: Solve the 8-Queens Problem Using Backtracking.
+
+Objective:
+  * To place eight queens on an 8x8 chessboard.
+  * To ensure that no two queens attack each other.
+  * To understand the Backtracking technique.
+
+Theory:
+
+The 8-Queens problem is a classical problem in which eight queens must be placed on an
+8x8 chessboard. A queen can attack another queen if they are in the same (1) Row, (2)
+Column or (3) Diagonal. Therefore, no two queens should share any of these positions.
+
+Backtracking: An algorithmic technique that builds a solution step by step. If a
+selected position violates the constraints, the algorithm removes that choice and tries
+another position.
+
+Algorithm:
+  1. Start.
+  2. Initialize an empty 8x8 chessboard.
+  3. Place the first queen at the given position.
+  4. Move to the next row.
+  5. Check every column for a safe position.
+  6. If a safe position is found, place a queen.
+  7. Move to the next row.
+  8. If no safe position exists, remove the previously placed queen.
+  9. Try the next available position.
+  10. Continue until all eight queens are placed.
+  11. Display the solution.
+  12. Stop.
+
+Safety conditions: A position is safe if:
+  * No queen exists in the same column.
+  * No queen exists in the upper-left diagonal.
+  * No queen exists in the upper-right diagonal.
+Because we place one queen per row, checking the same row is unnecessary.
+
+Important points:
+  * Technique: Backtracking. Board size: 8x8. Total queens: 8.
+  * One queen per row and column.
+  * There are 92 distinct solutions if rotations and reflections are counted separately.
+  * Common upper-bound time complexity for the row-wise backtracking approach: O(N!).
+  * Space complexity: O(N^2) for the board.
+
+Conclusion: Thus, we successfully solved the 8-Queens problem using Backtracking by
+placing eight queens without violating the attacking conditions.
+
+========================================================================================
+GROUP B - MACHINE LEARNING AND DATA SCIENCE
+========================================================================================
+
+5 practicals. Learn the common workflow first because many steps repeat across
+experiments.
+
+----------------------------------------------------------------------------------------
+Common Machine Learning Workflow
+----------------------------------------------------------------------------------------
+
+  1. Import required libraries
+  2. Load the dataset
+  3. Perform data preprocessing
+  4. Split data into training and testing sets
+  5. Train the ML model
+  6. Make predictions
+  7. Evaluate model performance
+
+Important libraries:
+  +--------------------+------------------------------+
+  | Library            | Purpose                      |
+  +--------------------+------------------------------+
+  | NumPy              | Numerical operations         |
+  | Pandas             | Data manipulation            |
+  | Matplotlib         | Data visualization           |
+  | Seaborn            | Statistical visualization    |
+  | Scikit-learn       | ML algorithms and evaluation |
+  | TensorFlow / Keras | Neural networks              |
+  +--------------------+------------------------------+
+
+----------------------------------------------------------------------------------------
+B1. Uber Fare Prediction Using Regression
+----------------------------------------------------------------------------------------
+
+Title: Uber Fare Prediction Using Linear Regression and Random Forest Regression.
+
+Objective:
+  * To predict Uber fare prices using Machine Learning.
+  * To perform data preprocessing and detect outliers.
+  * To perform correlation analysis.
+  * To implement Linear Regression and Random Forest Regression.
+  * To compare both models using R2 and RMSE.
+
+Theory:
+
+Regression is a supervised Machine Learning technique used to predict continuous
+numerical values. In this practical, we predict Uber fare prices based on features such
+as pickup location, drop-off location, passenger count, distance and other numerical
+features.
+
+1. Data Preprocessing: Cleaning and transforming raw data into a suitable format.
+  * Remove duplicate records.
+  * Handle missing values.
+  * Convert data types.
+  * Remove unnecessary columns.
+  * Handle outliers.
+
+2. Outlier Detection: Outliers are data points significantly different from other
+observations. The IQR method is commonly used.
+      IQR = Q3 - Q1
+      Lower limit = Q1 - 1.5 x IQR
+      Upper limit = Q3 + 1.5 x IQR
+Values outside these limits are potential outliers.
+
+3. Correlation Analysis: Correlation measures the relationship between two variables.
+Pearson correlation coefficient: -1 <= r <= 1.
+  * +1: Perfect positive correlation.
+  * -1: Perfect negative correlation.
+  * 0: No linear correlation.
+A heatmap can be used to visualize correlation.
+
+4. Linear Regression: Predicts a continuous value by establishing a linear relationship
+between independent and dependent variables.
+      Y = mX + c
+Where Y = predicted value, X = independent variable, m = slope, c = intercept.
+
+5. Random Forest Regression: An ensemble learning algorithm that combines multiple
+decision trees. Each tree generates a prediction, and the final output is generally the
+average of all tree predictions.
+  * Handles nonlinear relationships.
+  * Reduces overfitting compared with a single decision tree in many cases.
+  * Works with multiple features.
+
+Algorithm:
+  1. Start.
+  2. Import required libraries.
+  3. Load Uber fare dataset using Pandas.
+  4. Check missing values and duplicate records.
+  5. Perform data cleaning and preprocessing.
+  6. Detect and handle outliers using IQR.
+  7. Perform correlation analysis.
+  8. Select independent and dependent variables.
+  9. Split dataset into training and testing sets.
+  10. Train Linear Regression model.
+  11. Train Random Forest Regression model.
+  12. Predict fare prices.
+  13. Calculate R2 and RMSE for both models.
+  14. Compare model performance.
+  15. Stop.
+
+Important formulas:
+
+R2 Score (Coefficient of Determination) - how well the model explains variation in the
+target variable:
+      R2 = 1 - [ sum (y - y_pred)^2 ] / [ sum (y - y_mean)^2 ]
+
+RMSE (Root Mean Squared Error) - average magnitude of errors, larger errors penalized
+more:
+      RMSE = sqrt( (1/n) x sum (y - y_pred)^2 )
+
+Important points:
+  * Type: Supervised Learning. Task: Regression. Target: Uber fare.
+  * Linear Regression: linear relationship. Random Forest: ensemble of decision trees.
+  * Higher R2 generally indicates better fit.
+  * Lower RMSE indicates better prediction accuracy.
+  * RMSE is expressed in the same units as the target variable.
+
+Conclusion: Thus, we successfully predicted Uber fares using Linear Regression and
+Random Forest Regression. We compared both models using R2 and RMSE to identify the
+better-performing model.
+
+----------------------------------------------------------------------------------------
+B2. Email Spam Classification Using KNN and SVM
+----------------------------------------------------------------------------------------
+
+Title: Email Spam Classification Using K-Nearest Neighbors (KNN) and Support Vector
+Machine (SVM).
+
+Objective:
+  * To classify emails as Spam or Not Spam.
+  * To implement KNN and SVM classifiers.
+  * To analyze and compare the performance of both algorithms.
+
+Theory:
+
+Classification is a supervised Machine Learning technique used to predict categorical
+outputs. Emails are classified into: Spam (unwanted or promotional emails) and Ham
+(genuine emails).
+
+1. Text Preprocessing: Email text must be converted into numerical form.
+  * Convert text to lowercase.
+  * Remove punctuation and special characters.
+  * Remove stop words.
+  * Apply stemming or lemmatization if required.
+  * Convert text into numerical features using CountVectorizer or TF-IDF.
+
+TF-IDF: Term Frequency-Inverse Document Frequency measures the importance of a word in a
+document relative to the complete collection of documents.
+      TF-IDF = TF x IDF
+
+2. K-Nearest Neighbors (KNN): Classifies a new data point based on its nearest K
+neighbors using distance calculations. The majority class among the K nearest neighbors
+becomes the predicted class.
+      Euclidean distance d = sqrt( sum (x_i - y_i)^2 )
+
+3. Support Vector Machine (SVM): A supervised learning algorithm for classification and
+regression. It finds an optimal hyperplane that separates different classes.
+  * Hyperplane: Decision boundary between classes.
+  * Support vectors: Data points closest to the hyperplane.
+  * Margin: Distance between the hyperplane and nearest support vectors.
+SVM tries to maximize the margin between classes.
+
+Algorithm:
+  1. Start.
+  2. Import required libraries.
+  3. Load the email dataset.
+  4. Check missing values and clean the text.
+  5. Convert email text into numerical features using TF-IDF.
+  6. Split dataset into training and testing sets.
+  7. Train the KNN classifier.
+  8. Train the SVM classifier.
+  9. Predict the email categories.
+  10. Calculate accuracy and other evaluation metrics.
+  11. Compare both classifiers.
+  12. Stop.
+
+Important points:
+  +----------------+-------------------+--------------------+
+  | Feature        | KNN               | SVM                |
+  +----------------+-------------------+--------------------+
+  | Type           | Supervised        | Supervised         |
+  | Technique      | Instance-based    | Margin-based       |
+  | Working        | Nearest neighbors | Optimal hyperplane |
+  | Main parameter | K                 | C, Kernel          |
+  | Prediction     | Distance-based    | Decision boundary  |
+  +----------------+-------------------+--------------------+
+
+Advantages of KNN: Simple to implement; no complex training process; easy to understand.
+Advantages of SVM: Effective in high-dimensional feature spaces; works well with sparse
+text features; supports different kernels.
+
+Evaluation metrics:
+  * Accuracy: Overall correct predictions.
+  * Precision: How many predicted spam emails are actually spam.
+  * Recall: How many actual spam emails are correctly identified.
+  * F1-score: Harmonic mean of precision and recall.
+      Accuracy = (TP + TN) / (TP + TN + FP + FN)
+
+Conclusion: Thus, we successfully classified emails into Spam and Ham categories using
+KNN and SVM. We compared the performance of both classifiers using evaluation metrics.
+
+----------------------------------------------------------------------------------------
+B3. Bank Customer Churn Prediction Using Neural Network
+----------------------------------------------------------------------------------------
+
+Title: Bank Customer Churn Prediction Using a Neural Network Classifier.
+
+Objective:
+  * To predict whether a bank customer will leave the bank.
+  * To build a Neural Network classification model.
+  * To perform data splitting and normalization.
+  * To optimize the model and evaluate its performance using accuracy and confusion
+      matrix.
+
+Theory:
+
+Customer churn refers to a customer stopping the use of a company's services. In
+banking, churn prediction identifies customers likely to close their accounts. This is a
+binary classification problem: 0 = customer will not leave, 1 = customer will leave.
+
+1. Data Preprocessing: The dataset may contain Customer ID, Credit score, Age, Gender,
+Balance, Estimated salary, Tenure, Number of products and Exited (target variable).
+Preprocessing includes:
+  * Handling missing values.
+  * Removing unnecessary columns.
+  * Encoding categorical variables.
+  * Normalizing numerical features.
+
+2. Train-Test Split: Training data is used to train the model; testing data is used to
+evaluate it on unseen observations. A common ratio is 80:20.
+
+3. Normalization: Scales features to a common range and helps neural networks train more
+effectively.
+      Min-Max: X' = (X - Xmin) / (Xmax - Xmin)
+
+4. Artificial Neural Network (ANN): A model inspired by the human brain. It consists of:
+  1. Input Layer - receives input features.
+  2. Hidden Layer - learns patterns from the data.
+  3. Output Layer - produces the final prediction.
+
+Activation functions:
+  * ReLU: commonly used in hidden layers.
+  * Sigmoid: commonly used for binary classification output (range 0 to 1).
+      Sigmoid f(x) = 1 / (1 + e^(-x))
+
+5. Model Optimization: Adjust the number of hidden layers, number of neurons, learning
+rate, batch size and number of epochs. Binary Cross-Entropy is commonly used as the loss
+function for binary classification.
+
+Algorithm:
+  1. Start.
+  2. Import required libraries.
+  3. Load the bank customer dataset.
+  4. Perform data preprocessing.
+  5. Encode categorical variables.
+  6. Separate input features and target variable.
+  7. Split data into training and testing sets.
+  8. Normalize numerical features.
+  9. Build a neural network.
+  10. Compile the model using an optimizer and loss function.
+  11. Train the model.
+  12. Predict customer churn.
+  13. Calculate accuracy.
+  14. Generate the confusion matrix.
+  15. Stop.
+
+Important points:
+  * Type: Supervised Learning. Task: Binary Classification. Model: ANN.
+  * Activation: ReLU and Sigmoid. Optimizer: Adam is commonly used.
+  * Loss function: Binary Cross-Entropy.
+  * Epoch: One complete pass through the training dataset.
+  * Batch size: Number of samples processed before updating model parameters.
+
+Confusion Matrix:
+  +-----------------+--------------------+--------------------+
+  |                 | Predicted Positive | Predicted Negative |
+  +-----------------+--------------------+--------------------+
+  | Actual Positive | TP                 | FN                 |
+  | Actual Negative | FP                 | TN                 |
+  +-----------------+--------------------+--------------------+
+
+  * TP: Correctly predicted churn.
+  * TN: Correctly predicted non-churn.
+  * FP: Incorrectly predicted churn.
+  * FN: Actual churn predicted as non-churn.
+
+Conclusion: Thus, we successfully developed a Neural Network model for predicting bank
+customer churn. We evaluated its performance using accuracy and a confusion matrix.
+
+----------------------------------------------------------------------------------------
+B4. Diabetes Prediction Using KNN
+----------------------------------------------------------------------------------------
+
+Title: Diabetes Prediction Using the K-Nearest Neighbors Algorithm.
+
+Objective:
+  * To predict whether a person has diabetes using the KNN algorithm.
+  * To preprocess the diabetes dataset.
+  * To calculate the confusion matrix, accuracy, error rate, precision and recall.
+
+Theory:
+
+Diabetes is a disease characterized by high blood glucose levels. Machine Learning can
+help predict the possibility of diabetes from medical attributes. Here we use KNN to
+classify whether a person is diabetic or non-diabetic.
+
+Dataset: The commonly used Pima Indians Diabetes dataset has these attributes:
+  +--------------------------+------------------------------+
+  | Attribute                | Meaning                      |
+  +--------------------------+------------------------------+
+  | Pregnancies              | Number of pregnancies        |
+  | Glucose                  | Glucose concentration        |
+  | BloodPressure            | Diastolic blood pressure     |
+  | SkinThickness            | Skin fold thickness          |
+  | Insulin                  | Insulin level                |
+  | BMI                      | Body Mass Index              |
+  | DiabetesPedigreeFunction | Family history-related score |
+  | Age                      | Age of person                |
+  | Outcome                  | Diabetes prediction (0 or 1) |
+  +--------------------------+------------------------------+
+
+1. KNN Algorithm: A supervised, non-parametric and instance-based learning algorithm.
+Working:
+  1. Select the value of K.
+  2. Calculate distances from the new data point to training points.
+  3. Identify the K nearest neighbors.
+  4. Count the classes of those neighbors.
+  5. Assign the majority class.
+
+2. Feature Scaling: KNN uses distance calculations, so features with large values can
+dominate smaller-valued features. Standardization is commonly used.
+      Z = (X - mean) / standard deviation
+
+Algorithm:
+  1. Start.
+  2. Import NumPy, Pandas and Scikit-learn.
+  3. Load diabetes.csv.
+  4. Check missing and invalid values.
+  5. Separate features and target variable.
+  6. Split dataset into training and testing sets.
+  7. Standardize the features.
+  8. Initialize KNN classifier with a selected K value.
+  9. Train the classifier.
+  10. Predict the output.
+  11. Generate the confusion matrix.
+  12. Calculate accuracy, error rate, precision and recall.
+  13. Stop.
+
+Important formulas:
+      Accuracy = (TP + TN) / (TP + TN + FP + FN) x 100
+      Error Rate = (FP + FN) / Total x 100
+      Precision = TP / (TP + FP)
+      Recall = TP / (TP + FN)
+
+Important points:
+  * Type: Supervised Learning. Task: Binary Classification. Algorithm: KNN.
+  * Distance metric: Euclidean distance. K is the number of nearest neighbors.
+  * Feature scaling is important.
+  * A very small K can cause overfitting. A very large K can cause underfitting.
+
+Conclusion: Thus, we successfully implemented the KNN algorithm for diabetes prediction
+and evaluated its performance using the confusion matrix, accuracy, error rate,
+precision and recall.
+
+----------------------------------------------------------------------------------------
+B5. Customer Segmentation Using K-Means and Hierarchical Clustering
+----------------------------------------------------------------------------------------
+
+Title: Customer Segmentation Using K-Means or Hierarchical Clustering.
+
+Objective:
+  * To group customers based on similar characteristics.
+  * To implement K-Means or Hierarchical Clustering.
+  * To determine the optimal number of clusters using the Elbow Method.
+
+Theory:
+
+Customer segmentation divides customers into groups based on their characteristics and
+purchasing behavior. It is an unsupervised Machine Learning technique because the
+dataset has no predefined target labels. The dataset is sales_data_sample.csv. Customers
+can be grouped on sales, purchase frequency, order value and spending patterns.
+
+1. K-Means Clustering: Divides data into K clusters; each cluster has a centroid
+representing its center. Working:
+  1. Select the number of clusters K.
+  2. Initialize K centroids.
+  3. Calculate the distance between data points and centroids.
+  4. Assign every data point to the nearest centroid.
+  5. Recalculate the centroids.
+  6. Repeat until the centroids stop changing significantly.
+
+2. Elbow Method: Determines the optimal number of clusters using Within-Cluster Sum of
+Squares (WCSS).
+      WCSS = sum over i=1..K of sum over x in Ci of (x - mean_i)^2
+Where K = number of clusters, Ci = cluster, mean_i = cluster centroid. As K increases,
+WCSS generally decreases. Plot K against WCSS and identify the elbow point where the
+reduction starts slowing down.
+
+3. Hierarchical Clustering: Creates a hierarchy of clusters.
+  * Agglomerative: Starts with individual points and repeatedly merges the closest
+      clusters.
+  * Divisive: Starts with one cluster and repeatedly divides it into smaller clusters.
+A dendrogram is used to visualize the hierarchical relationships.
+
+Algorithm (K-Means):
+  1. Start.
+  2. Import required libraries.
+  3. Load sales_data_sample.csv.
+  4. Perform data cleaning.
+  5. Select relevant numerical features.
+  6. Normalize or standardize the data.
+  7. Apply the Elbow Method.
+  8. Determine the optimal K.
+  9. Initialize K-Means with the selected K.
+  10. Fit the clustering model.
+  11. Assign cluster labels to customers.
+  12. Visualize the clusters.
+  13. Stop.
+
+Important points:
+  +-------------------------------+----------------------------------+
+  | K-Means                       | Hierarchical                     |
+  +-------------------------------+----------------------------------+
+  | Partitional clustering        | Hierarchical clustering          |
+  | Requires K beforehand         | Does not require K initially     |
+  | Uses centroids                | Uses distance between clusters   |
+  | Elbow Method                  | Dendrogram                       |
+  | Efficient for larger datasets | Can be computationally expensive |
+  +-------------------------------+----------------------------------+
+
+  * Type: Unsupervised Learning.
+  * K-Means commonly uses Euclidean distance.
+  * Centroid is the mean of points in a cluster.
+  * Scaling is important because clustering uses distances.
+  * WCSS measures within-cluster variation.
+
+Conclusion: Thus, we successfully performed customer segmentation using clustering
+algorithms and determined the optimal number of clusters using the Elbow Method.
+
+========================================================================================
+GROUP C - BLOCKCHAIN TECHNOLOGY
+========================================================================================
+
+4 practicals. These cover MetaMask, cryptocurrency transactions, Solidity smart
+contracts and Ethereum gas fees.
+
+----------------------------------------------------------------------------------------
+C1. MetaMask Installation and Ether Transaction Costs
+----------------------------------------------------------------------------------------
+
+Title: Install and Configure MetaMask and Examine the Ether Transaction Costs of
+Individual Transactions.
+
+Objective:
+  * To install and configure the MetaMask wallet.
+  * To understand Ethereum accounts and transactions.
+  * To examine Ether transaction costs.
+  * To understand gas and transaction fees.
+
+Theory:
+
+Blockchain is a distributed and decentralized digital ledger that stores transactions in
+blocks. Ethereum is a blockchain platform that supports smart contracts and
+decentralized applications (DApps).
+
+1. MetaMask: A cryptocurrency wallet that allows users to interact with the Ethereum
+blockchain and decentralized applications.
+  * Create Ethereum accounts.
+  * Store and manage crypto assets.
+  * Send and receive Ether.
+  * Connect to decentralized applications.
+  * Interact with smart contracts.
+
+2. Ethereum: A decentralized blockchain network that supports programmable smart
+contracts. Its native cryptocurrency is Ether (ETH).
+
+3. Gas: The unit measuring the computational effort required to perform operations on
+Ethereum. Every transaction requires gas.
+      Transaction Fee = Gas Used x Gas Price
+Example: Gas used = 21,000; Gas price = 20 Gwei
+      Fee = 21000 x 20 = 420000 Gwei = 0.00042 ETH
+
+4. Wei and Gwei:
+  * Wei: Smallest unit of Ether.
+  * Gwei: Common unit for expressing gas prices.
+      1 ETH = 10^9 Gwei
+      1 ETH = 10^18 Wei
+
+Algorithm / Procedure:
+  1. Start.
+  2. Install the MetaMask browser extension.
+  3. Create a new wallet.
+  4. Set a secure password.
+  5. Securely back up the Secret Recovery Phrase.
+  6. Select the required Ethereum network.
+  7. Obtain test Ether if using a test network.
+  8. Perform a transaction.
+  9. Open the transaction details.
+  10. Examine gas used, gas price and transaction fee.
+  11. Calculate the transaction cost.
+  12. Stop.
+
+Important points:
+  * MetaMask is a non-custodial wallet.
+  * A wallet is used to manage blockchain accounts.
+  * Public address can be shared to receive funds.
+  * Private keys and recovery phrases must never be shared.
+  * Gas is the computational cost of a transaction; gas fees are generally paid in ETH
+      on Ethereum.
+  * A transaction hash is a unique identifier for a transaction.
+  * Ethereum transactions are recorded on the blockchain.
+
+Conclusion: Thus, we successfully installed and configured MetaMask, performed Ethereum
+transactions and examined the gas fees associated with individual transactions.
+
+----------------------------------------------------------------------------------------
+C2. Personal Wallet Creation and Cryptocurrency Transactions
+----------------------------------------------------------------------------------------
+
+Title: Create and Configure a Personal Wallet Using MetaMask and Perform Cryptocurrency
+Transactions.
+
+Objective:
+  * To create a personal cryptocurrency wallet.
+  * To configure MetaMask.
+  * To understand public and private keys.
+  * To perform cryptocurrency transactions.
+
+Theory:
+
+A cryptocurrency wallet is a digital tool used to manage blockchain accounts and
+interact with cryptocurrencies. It does not physically store coins; it manages the
+cryptographic keys that provide access to assets recorded on the blockchain.
+
+1. Public Key: A cryptographic key used to derive a wallet address. It is used to verify
+digital signatures.
+2. Private Key: A secret cryptographic key that provides control over the account. It
+must be kept confidential.
+3. Wallet Address: A publicly shareable identifier used to receive cryptocurrency. An
+Ethereum address is generally a 42-character hexadecimal string starting with 0x.
+4. Secret Recovery Phrase: Generally 12 or 24 words used to recover a wallet. Anyone who
+obtains it can potentially control the wallet.
+5. Cryptocurrency Transaction: Transfers digital assets from one wallet address to
+another. It generally includes sender address, receiver address, amount, transaction
+fee, nonce and digital signature.
+
+Algorithm / Procedure:
+  1. Start.
+  2. Install MetaMask.
+  3. Select Create a New Wallet.
+  4. Set a password.
+  5. Generate the Secret Recovery Phrase.
+  6. Securely store and verify the recovery phrase.
+  7. Create the wallet.
+  8. Copy the public wallet address.
+  9. Select the appropriate blockchain network.
+  10. Obtain cryptocurrency or test Ether.
+  11. Select Send.
+  12. Enter the receiver's wallet address.
+  13. Enter the amount.
+  14. Review transaction details and gas fee.
+  15. Confirm the transaction.
+  16. Check the transaction status.
+  17. Stop.
+
+Important points:
+  +------------------+---------------------------------------+
+  | Term             | Meaning                               |
+  +------------------+---------------------------------------+
+  | Wallet           | Manages crypto accounts and keys      |
+  | Public key       | Used for cryptographic verification   |
+  | Private key      | Secret key controlling account access |
+  | Wallet address   | Used to send and receive crypto       |
+  | ETH              | Ethereum's native cryptocurrency      |
+  | Gas fee          | Transaction execution cost            |
+  | Transaction hash | Unique transaction identifier         |
+  +------------------+---------------------------------------+
+
+Advantages of cryptocurrency wallets:
+  * Easy transfer of digital assets.
+  * Access to decentralized applications.
+  * User-controlled account access.
+  * Global transactions.
+
+Conclusion: Thus, we successfully created and configured a personal MetaMask wallet and
+performed cryptocurrency transactions while understanding wallet addresses, keys and
+transaction fees.
+
+----------------------------------------------------------------------------------------
+C3. Solidity Smart Contract for Customer Bank Account
+----------------------------------------------------------------------------------------
+
+Title: Implement a Solidity Smart Contract for Customer Bank Account Operations
+(Deposit, Withdraw and Display Balance) and Deploy It on a Test Network.
+
+Objective:
+  * To understand Solidity programming.
+  * To create a smart contract for bank account operations.
+  * To implement deposit, withdrawal and balance display functions.
+  * To deploy the smart contract on an Ethereum test network.
+
+Theory:
+
+A smart contract is a self-executing program stored on a blockchain. It automatically
+executes predefined instructions when specified conditions are satisfied. Solidity is a
+high-level, statically typed programming language used to write smart contracts on
+Ethereum.
+
+1. Solidity supports variables, functions, conditions, loops, structures, arrays,
+modifiers and events.
+
+2. Smart Contract: Consists of state variables and functions. A bank account contract
+needs a deposit function, a withdraw function and a balance display function.
+
+3. Important Solidity Keywords:
+  +------------+------------------------------------+
+  | Keyword    | Meaning                            |
+  +------------+------------------------------------+
+  | pragma     | Specifies compiler version         |
+  | contract   | Defines a smart contract           |
+  | uint       | Unsigned integer                   |
+  | address    | Ethereum address                   |
+  | mapping    | Key-value data structure           |
+  | function   | Defines an operation               |
+  | payable    | Allows receiving Ether             |
+  | require()  | Checks a condition                 |
+  | msg.sender | Address calling the function       |
+  | msg.value  | Ether sent with the transaction    |
+  | view       | Reads data without modifying state |
+  | public     | Allows external access             |
+  +------------+------------------------------------+
+
+4. Deposit Function: Accepts Ether and adds it to the account balance. It generally uses
+the payable keyword.
+5. Withdraw Function: Transfers Ether from the contract to the user. A require()
+statement checks whether sufficient balance is available.
+6. Display Balance: Shows the current balance. The expression address(this).balance
+returns the Ether balance held by the contract.
+
+Algorithm:
+  1. Start.
+  2. Open Remix IDE.
+  3. Create a new Solidity file.
+  4. Specify the Solidity compiler version.
+  5. Declare the smart contract.
+  6. Declare the required state variables.
+  7. Implement the deposit function.
+  8. Implement the withdrawal function.
+  9. Implement the balance display function.
+  10. Compile the smart contract.
+  11. Connect MetaMask to the selected test network.
+  12. Deploy the contract.
+  13. Execute deposit and withdrawal operations.
+  14. Verify the updated balance.
+  15. Stop.
+
+Important points:
+  * Language: Solidity. Platform: Ethereum. IDE: Remix IDE. Wallet: MetaMask.
+  * payable allows a function to receive Ether.
+  * require() validates conditions.
+  * msg.sender identifies the caller; msg.value represents Ether sent with the
+      transaction.
+  * Smart contract deployment requires gas. State-changing transactions require gas
+      fees.
+  * Read-only calls such as view functions can generally be executed without an on-chain
+      transaction fee.
+
+Test Network: A blockchain environment used for testing applications without using real
+Ether. Examples include Sepolia and other supported Ethereum test networks.
+
+Conclusion: Thus, we successfully developed and deployed a Solidity smart contract for
+bank account operations and performed deposit, withdrawal and balance checking on an
+Ethereum test network.
+
+----------------------------------------------------------------------------------------
+C4. Student Information Smart Contract Using Structures, Arrays and Fallback Function
+----------------------------------------------------------------------------------------
+
+Title: Implement a Solidity Smart Contract for Student Information Using Structures,
+Arrays and a Fallback Function. Deploy and Examine Gas and Fees.
+
+Objective:
+  * To implement a student information management system using Solidity.
+  * To understand structures and arrays.
+  * To implement a fallback function.
+  * To deploy the contract and examine gas consumption and transaction fees.
+
+Theory:
+
+Solidity provides different data structures for storing and managing information on the
+blockchain. In this practical, structures and arrays store student information.
+
+1. Structure (struct): A user-defined data type that groups multiple variables of
+different data types into a single unit. A student structure may contain roll number,
+student name and marks.
+    struct Student {
+        uint rollNo;
+        string name;
+        uint marks;
+    }
+
+2. Array: A collection of elements of the same data type. Solidity supports fixed-size
+and dynamic arrays. Example (dynamic array of Student structures):
+    Student[] public students;
+
+3. Fallback Function: A special function executed when a call does not match any
+existing function, or the call contains data that does not match a known function
+selector. It is declared using the fallback() keyword.
+    fallback() external payable {
+        // Executes for unmatched calls
+    }
+Important: A separate receive() function handles plain Ether transfers with empty
+calldata when it is defined. The fallback function handles unmatched calls and may also
+receive Ether if declared payable.
+
+4. Gas and Transaction Fees: Gas is the computational unit required to execute smart
+contract operations. Operations such as storing student details consume gas. More
+complex operations generally require more gas.
+      Fee = Gas Used x Gas Price
+
+Algorithm:
+  1. Start.
+  2. Open Remix IDE.
+  3. Create a Solidity file.
+  4. Specify the compiler version.
+  5. Declare a smart contract.
+  6. Define the Student structure.
+  7. Declare a dynamic array of Student structures.
+  8. Implement a function to add student details.
+  9. Implement a function to retrieve student details.
+  10. Implement the fallback function.
+  11. Compile the contract.
+  12. Connect MetaMask to the test network.
+  13. Deploy the smart contract.
+  14. Add student records.
+  15. Execute an unmatched function call to test fallback behavior.
+  16. Examine gas usage and transaction fees.
+  17. Stop.
+
+Important points:
+  +---------------+---------------------------------------+
+  | Concept       | Explanation                           |
+  +---------------+---------------------------------------+
+  | Struct        | Groups different data types           |
+  | Array         | Stores multiple elements              |
+  | Dynamic array | Can grow in size                      |
+  | Fallback      | Handles unmatched calls               |
+  | Receive       | Handles plain Ether transfers         |
+  | Gas           | Measures computational work           |
+  | Gas price     | Cost per unit of gas                  |
+  | Deployment    | Publishing the contract on blockchain |
+  +---------------+---------------------------------------+
+
+Advantages:
+  * Student records can be stored on blockchain.
+  * Smart contract operations are transparent.
+  * Data can be accessed through defined functions.
+  * Blockchain provides tamper-resistant record keeping.
+
+Conclusion: Thus, we successfully implemented a student information smart contract using
+structures, arrays and a fallback function. We deployed the contract on a test network
+and examined gas consumption and transaction fees.
+
+========================================================================================
+FINAL REVISION - IMPORTANT VIVA QUESTIONS
+========================================================================================
+
+----------------------------------------------------------------------------------------
+1. DAA - Most Important Questions
+----------------------------------------------------------------------------------------
+  +-------------------------------------------------+---------------------------------------------------------------------------+
+  | Question                                        | Answer                                                                    |
+  +-------------------------------------------------+---------------------------------------------------------------------------+
+  | What is an algorithm?                           | Step-by-step procedure to solve a problem.                                |
+  | What is Greedy Algorithm?                       | Makes the locally best choice at each step.                               |
+  | What is Dynamic Programming?                    | Solves problems using stored results of overlapping subproblems.          |
+  | What is Backtracking?                           | Builds solutions and reverses choices when constraints fail.              |
+  | What is recursion?                              | A function calling itself.                                                |
+  | What is time complexity?                        | Measures how running time grows with input size.                          |
+  | What is space complexity?                       | Measures memory required by an algorithm.                                 |
+  | What is Big O?                                  | Represents an asymptotic upper bound.                                     |
+  | What is optimal substructure?                   | An optimal solution can be constructed from optimal subproblem solutions. |
+  | Difference between 0/1 and Fractional Knapsack? | 0/1 doesn't allow fractions; Fractional allows fractions.                 |
+  +-------------------------------------------------+---------------------------------------------------------------------------+
+
+----------------------------------------------------------------------------------------
+2. Machine Learning - Most Important Questions
+----------------------------------------------------------------------------------------
+  +--------------------------------+-----------------------------------------------------------------+
+  | Question                       | Answer                                                          |
+  +--------------------------------+-----------------------------------------------------------------+
+  | What is Machine Learning?      | Teaching computers to learn patterns from data.                 |
+  | What is supervised learning?   | Learning using labeled data.                                    |
+  | What is unsupervised learning? | Learning patterns from unlabeled data.                          |
+  | What is regression?            | Predicting continuous numerical values.                         |
+  | What is classification?        | Predicting categorical outputs.                                 |
+  | What is clustering?            | Grouping similar data points.                                   |
+  | What is KNN?                   | Classifies using nearest neighbors.                             |
+  | What is SVM?                   | Finds an optimal separating hyperplane.                         |
+  | What is Random Forest?         | Ensemble of multiple decision trees.                            |
+  | What is a Neural Network?      | A model consisting of interconnected artificial neurons.        |
+  | What is overfitting?           | Model performs well on training data but poorly on unseen data. |
+  | What is normalization?         | Scaling features to a common range.                             |
+  | What is a confusion matrix?    | Table showing actual versus predicted classes.                  |
+  | What is precision?             | TP / (TP + FP).                                                 |
+  | What is recall?                | TP / (TP + FN).                                                 |
+  | What is the Elbow Method?      | Method for estimating the optimal number of clusters.           |
+  | What is TF-IDF?                | Measures the importance of words in documents.                  |
+  +--------------------------------+-----------------------------------------------------------------+
+
+----------------------------------------------------------------------------------------
+3. Blockchain - Most Important Questions
+----------------------------------------------------------------------------------------
+  +-----------------------------+---------------------------------------------------+
+  | Question                    | Answer                                            |
+  +-----------------------------+---------------------------------------------------+
+  | What is Blockchain?         | A decentralized distributed digital ledger.       |
+  | What is Ethereum?           | A blockchain platform supporting smart contracts. |
+  | What is Solidity?           | Programming language for smart contracts.         |
+  | What is MetaMask?           | A cryptocurrency wallet.                          |
+  | What is Ether?              | Ethereum's native cryptocurrency.                 |
+  | What is a smart contract?   | A program deployed on a blockchain.               |
+  | What is Gas?                | Unit measuring computational effort.              |
+  | What is Gas Fee?            | Cost of executing a blockchain transaction.       |
+  | What is a test network?     | Network used to test blockchain applications.     |
+  | What is Remix IDE?          | Browser-based Solidity development environment.   |
+  | What is payable?            | Allows a function to receive Ether.               |
+  | What is require()?          | Checks conditions and reverts if they fail.       |
+  | What is msg.sender?         | Address of the caller.                            |
+  | What is msg.value?          | Amount of Ether sent with the call.               |
+  | What is struct?             | User-defined type grouping multiple variables.    |
+  | What is fallback?           | Special function handling unmatched calls.        |
+  | What is a transaction hash? | Unique identifier of a blockchain transaction.    |
+  +-----------------------------+---------------------------------------------------+
+
+========================================================================================
+LAST-MINUTE PRACTICAL COMPARISON SHEET
+========================================================================================
+
+Examiners can ask you to differentiate between similar practicals.
+
+----------------------------------------------------------------------------------------
+DAA
+----------------------------------------------------------------------------------------
+  +----------------------------+--------------------------------------------------------------------------------------+
+  | Concepts                   | Main difference                                                                      |
+  +----------------------------+--------------------------------------------------------------------------------------+
+  | Greedy vs DP               | Greedy makes local choices; DP stores subproblem results.                            |
+  | DP vs Backtracking         | DP reuses computed results; Backtracking explores choices and reverses invalid ones. |
+  | Fractional vs 0/1 Knapsack | Fractions allowed vs not allowed.                                                    |
+  | Recursion vs Iteration     | Function calls itself vs loop-based execution.                                       |
+  +----------------------------+--------------------------------------------------------------------------------------+
+
+----------------------------------------------------------------------------------------
+Machine Learning
+----------------------------------------------------------------------------------------
+  +----------------------------------+------------------------------------------------------------------------+
+  | Concepts                         | Main difference                                                        |
+  +----------------------------------+------------------------------------------------------------------------+
+  | Regression vs Classification     | Numerical output vs categorical output.                                |
+  | Supervised vs Unsupervised       | Labeled vs unlabeled data.                                             |
+  | KNN vs SVM                       | Nearest neighbors vs hyperplane.                                       |
+  | K-Means vs Hierarchical          | Centroid-based vs hierarchy-based clustering.                          |
+  | Accuracy vs Precision            | Overall correctness vs correctness of positive predictions.            |
+  | Normalization vs Standardization | Usually scales to a range vs scales using mean and standard deviation. |
+  +----------------------------------+------------------------------------------------------------------------+
+
+----------------------------------------------------------------------------------------
+Blockchain
+----------------------------------------------------------------------------------------
+  +---------------------------+----------------------------------------------------------------+
+  | Concepts                  | Main difference                                                |
+  +---------------------------+----------------------------------------------------------------+
+  | Public key vs Private key | Verification-related key vs secret control key.                |
+  | ETH vs Gwei               | Ether currency vs gas-price denomination.                      |
+  | Struct vs Array           | Groups different data types vs stores collections of elements. |
+  | Fallback vs Receive       | Unmatched calls vs plain Ether transfers with empty calldata.  |
+  | Mainnet vs Testnet        | Real transactions vs testing environment.                      |
+  +---------------------------+----------------------------------------------------------------+
+
+========================================================================================
+SUGGESTED STUDY ORDER FOR TONIGHT
+========================================================================================
+
+Revision checklist:
+  +--------------------------------+-------------------+
+  | Topic                          | Time              |
+  +--------------------------------+-------------------+
+  | DAA - All 6 algorithms         | 1 hour 30 minutes |
+  | ML - All 5 practicals          | 2 hours           |
+  | Blockchain - All 4 practicals  | 1 hour 15 minutes |
+  | Important viva questions       | 45 minutes        |
+  | Revise algorithms and formulas | 30 minutes        |
+  +--------------------------------+-------------------+
+
+Estimated study time: about 6 hours. Adjust according to your preparation.
+
+Advice for tomorrow:
+  1. First explain the objective in two sentences.
+  2. Explain the underlying algorithm or ML technique.
+  3. Write the algorithm step by step.
+  4. Explain the important formula.
+  5. Show the output and explain what it means.
+  6. End with the conclusion.
+
+Important: The practical question list contains the questions, not the exact
+implementation code or dataset specifications. Use the exact dataset columns and
+implementation requirements given by your college when performing the experiments.
+Prioritize understanding all 15 practicals rather than memorizing paragraphs word for
+word. Good luck!
+

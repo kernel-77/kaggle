@@ -1,0 +1,195 @@
+Design and implement a greedy algorithm for the Fractional Knapsack problem
+
+import java.util.*;
+
+class Item {
+    int weight;
+    int profit;
+    double ratio;
+
+    Item(int weight, int profit) {
+        this.weight = weight;
+        this.profit = profit;
+        this.ratio = (double) profit / weight;
+    }
+}
+
+public class FractionalKnapsack {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of items: ");
+        int n = sc.nextInt();
+
+        Item[] items = new Item[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.println("\nEnter details of Item " + (i + 1));
+
+            System.out.print("Enter weight: ");
+            int weight = sc.nextInt();
+
+            System.out.print("Enter profit: ");
+            int profit = sc.nextInt();
+
+            items[i] = new Item(weight, profit);
+        }
+
+        System.out.print("\nEnter knapsack capacity: ");
+        int capacity = sc.nextInt();
+
+        Arrays.sort(items, (a, b) -> Double.compare(b.ratio, a.ratio));
+
+        double totalProfit = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            if (capacity == 0) {
+                break;
+            }
+
+            if (items[i].weight <= capacity) {
+                capacity -= items[i].weight;
+                totalProfit += items[i].profit;
+
+                System.out.println("Selected full item: Weight = "
+                        + items[i].weight + ", Profit = " + items[i].profit);
+            } else {
+                double fraction = (double) capacity / items[i].weight;
+
+                totalProfit += items[i].profit * fraction;
+
+                System.out.println("Selected fraction: " + fraction
+                        + ", Weight = " + capacity);
+
+                capacity = 0;
+            }
+        }
+
+        System.out.println("\nMaximum Profit = " + totalProfit);
+
+        sc.close();
+    }
+}
+
+----------------------------------------------------------------------------------------
+
+Bank Customer Churn: neural network classifier;
+split, normalize, build and optimize model; accuracy and confusion matrix.
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Input, Dense, Dropout
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+
+df = pd.read_csv("Churn_Modelling.csv")
+
+print("Dataset Shape:", df.shape)
+print(df.head())
+print(df.isnull().sum())
+
+df = df.drop(["RowNumber", "CustomerId", "Surname"], axis=1)
+
+df = pd.get_dummies(df, columns=["Geography", "Gender"], drop_first=True, dtype=int)
+
+X = df.drop("Exited", axis=1)
+y = df["Exited"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+scaler = StandardScaler()
+
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+model = Sequential([
+    Input(shape=(X_train.shape[1],)),
+    Dense(64, activation="relu"),
+    Dropout(0.3),
+    Dense(32, activation="relu"),
+    Dropout(0.2),
+    Dense(16, activation="relu"),
+    Dense(1, activation="sigmoid")
+])
+
+model.compile(
+    optimizer="adam",
+    loss="binary_crossentropy",
+    metrics=["accuracy"]
+)
+
+early_stop = EarlyStopping(
+    monitor="val_loss",
+    patience=5,
+    restore_best_weights=True
+)
+
+reduce_lr = ReduceLROnPlateau(
+    monitor="val_loss",
+    factor=0.5,
+    patience=3,
+    min_lr=0.00001
+)
+
+history = model.fit(
+    X_train,
+    y_train,
+    epochs=50,
+    batch_size=32,
+    validation_split=0.2,
+    callbacks=[early_stop, reduce_lr],
+    verbose=1
+)
+
+loss, accuracy = model.evaluate(X_test, y_test, verbose=0)
+
+print("\nTest Loss:", loss)
+print("Test Accuracy:", accuracy * 100, "%")
+
+y_pred_prob = model.predict(X_test)
+y_pred = (y_pred_prob > 0.5).astype(int)
+
+print("\nAccuracy:", accuracy_score(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+cm = confusion_matrix(y_test, y_pred)
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.show()
+
+plt.figure(figsize=(8, 5))
+plt.plot(history.history["accuracy"], label="Training Accuracy")
+plt.plot(history.history["val_accuracy"], label="Validation Accuracy")
+plt.title("Model Accuracy")
+plt.xlabel("Epochs")
+plt.ylabel("Accuracy")
+plt.legend()
+plt.show()
+
+plt.figure(figsize=(8, 5))
+plt.plot(history.history["loss"], label="Training Loss")
+plt.plot(history.history["val_loss"], label="Validation Loss")
+plt.title("Model Loss")
+plt.xlabel("Epochs")
+plt.ylabel("Loss")
+plt.legend()
+plt.show()

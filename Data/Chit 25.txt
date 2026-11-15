@@ -1,0 +1,143 @@
+Calculate binomial coefficients using dynamic programming. 
+
+
+import java.util.*;
+
+public class BinomialCoefficient {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter value of n: ");
+        int n = sc.nextInt();
+
+        System.out.print("Enter value of r: ");
+        int r = sc.nextInt();
+
+        if (n < 0 || r < 0 || r > n) {
+            System.out.println("Invalid input!");
+            sc.close();
+            return;
+        }
+
+        int[][] dp = new int[n + 1][r + 1];
+
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= Math.min(i, r); j++) {
+
+                if (j == 0 || j == i) {
+                    dp[i][j] = 1;
+                } else {
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+                }
+            }
+        }
+
+        System.out.println("Binomial Coefficient C(" + n + "," + r + ") = " + dp[n][r]);
+
+        sc.close();
+    }
+}
+
+--------------------------------------------------------------------------------------------------
+
+Customer Segmentation on sales_data_sample.csv
+using K-Means or hierarchical clustering; find optimal clusters with the elbow method.
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+df = pd.read_csv("sales_data_sample.csv", encoding="latin1")
+
+print("Dataset Shape:", df.shape)
+print(df.head())
+
+df["ORDERDATE"] = pd.to_datetime(df["ORDERDATE"])
+
+reference_date = df["ORDERDATE"].max() + pd.Timedelta(days=1)
+
+customer_data = df.groupby("CUSTOMERNAME").agg({
+    "ORDERDATE": lambda x: (reference_date - x.max()).days,
+    "ORDERNUMBER": "nunique",
+    "SALES": "sum",
+    "QUANTITYORDERED": "sum"
+})
+
+customer_data.columns = [
+    "Recency",
+    "Frequency",
+    "Monetary",
+    "TotalQuantity"
+]
+
+print("\nCustomer Data:")
+print(customer_data.head())
+
+X = np.log1p(customer_data)
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+wcss = []
+
+for i in range(1, 11):
+    kmeans = KMeans(
+        n_clusters=i,
+        random_state=42,
+        n_init=10
+    )
+    kmeans.fit(X_scaled)
+    wcss.append(kmeans.inertia_)
+
+plt.figure(figsize=(8, 5))
+plt.plot(range(1, 11), wcss, marker="o")
+plt.title("Elbow Method")
+plt.xlabel("Number of Clusters")
+plt.ylabel("WCSS")
+plt.xticks(range(1, 11))
+plt.grid(True)
+plt.show()
+
+optimal_k = 3
+
+kmeans = KMeans(
+    n_clusters=optimal_k,
+    random_state=42,
+    n_init=10
+)
+
+customer_data["Cluster"] = kmeans.fit_predict(X_scaled)
+
+print("\nCustomer Segmentation:")
+print(customer_data.head(10))
+
+print("\nNumber of Customers in Each Cluster:")
+print(customer_data["Cluster"].value_counts().sort_index())
+
+print("\nCluster Analysis:")
+print(customer_data.groupby("Cluster").mean().round(2))
+
+plt.figure(figsize=(8, 5))
+sns.scatterplot(
+    data=customer_data,
+    x="Frequency",
+    y="Monetary",
+    hue="Cluster",
+    palette="Set1",
+    s=100
+)
+plt.title("Customer Segmentation using K-Means")
+plt.xlabel("Frequency")
+plt.ylabel("Total Sales")
+plt.show()
+
+customer_data.to_csv("customer_segments.csv")
+
+print("\nCustomer segmentation completed successfully!")
+print("Results saved in customer_segments.csv")

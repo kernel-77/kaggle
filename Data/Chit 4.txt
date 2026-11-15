@@ -1,0 +1,110 @@
+Generate Fibonacci numbers and determine the number of computational
+steps required. 
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter the number of terms: ");
+        int n = sc.nextInt();
+
+        int a = 0, b = 1;
+        int steps = 0;
+
+        System.out.println("Fibonacci Series:");
+
+        for (int i = 0; i < n; i++) {
+            System.out.print(a + " ");
+
+            int c = a + b;
+            a = b;
+            b = c;
+
+            steps++;
+        }
+
+        System.out.println("\nComputational Steps: " + steps);
+
+        sc.close();
+    }
+}
+------------------------------------------------------------------------------------------
+Diabetes Prediction using KNN on diabetes.csv;
+confusion matrix, accuracy, error rate, precision, recall.
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import (
+    confusion_matrix,
+    accuracy_score,
+    precision_score,
+    recall_score,
+    classification_report
+)
+
+df = pd.read_csv("diabetes(1).csv")
+
+print("Dataset Shape:", df.shape)
+print(df.head())
+
+X = df.drop("Outcome", axis=1)
+y = df["Outcome"]
+
+zero_columns = ["Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI"]
+X[zero_columns] = X[zero_columns].replace(0, np.nan)
+
+imputer = SimpleImputer(strategy="median")
+X = pd.DataFrame(imputer.fit_transform(X), columns=X.columns)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
+)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+knn = KNeighborsClassifier(n_neighbors=5)
+
+knn.fit(X_train, y_train)
+
+y_pred = knn.predict(X_test)
+
+cm = confusion_matrix(y_test, y_pred)
+
+accuracy = accuracy_score(y_test, y_pred)
+error_rate = 1 - accuracy
+precision = precision_score(y_test, y_pred, zero_division=0)
+recall = recall_score(y_test, y_pred, zero_division=0)
+
+print("\nConfusion Matrix:")
+print(cm)
+
+print("\nAccuracy:", accuracy * 100, "%")
+print("Error Rate:", error_rate * 100, "%")
+print("Precision:", precision)
+print("Recall:", recall)
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred, zero_division=0))
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+
+plt.title("Confusion Matrix - KNN")
+plt.xlabel("Predicted Values")
+plt.ylabel("Actual Values")
+plt.show()

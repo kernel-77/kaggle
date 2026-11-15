@@ -1,0 +1,235 @@
+Implement the 0-1 Knapsack problem using dynamic programming or branch
+and bound. 
+
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of items: ");
+        int n = sc.nextInt();
+
+        int[] weight = new int[n];
+        int[] profit = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.println("\nEnter details of Item " + (i + 1));
+
+            System.out.print("Enter weight: ");
+            weight[i] = sc.nextInt();
+
+            System.out.print("Enter profit: ");
+            profit[i] = sc.nextInt();
+        }
+
+        System.out.print("\nEnter knapsack capacity: ");
+        int capacity = sc.nextInt();
+
+        int[][] dp = new int[n + 1][capacity + 1];
+
+        for (int i = 1; i <= n; i++) {
+            for (int w = 1; w <= capacity; w++) {
+
+                if (weight[i - 1] <= w) {
+                    dp[i][w] = Math.max(
+                        profit[i - 1] + dp[i - 1][w - weight[i - 1]],
+                        dp[i - 1][w]
+                    );
+                } else {
+                    dp[i][w] = dp[i - 1][w];
+                }
+            }
+        }
+
+        System.out.println("\nMaximum Profit: " + dp[n][capacity]);
+
+        System.out.println("\nSelected Items:");
+
+        int w = capacity;
+
+        for (int i = n; i > 0; i--) {
+            if (dp[i][w] != dp[i - 1][w]) {
+                System.out.println("Item " + i +
+                        " - Weight: " + weight[i - 1] +
+                        ", Profit: " + profit[i - 1]);
+
+                w -= weight[i - 1];
+            }
+        }
+
+        sc.close();
+    }
+}
+
+-----------------------------------------------------------------------------------------
+
+Uber Fare Prediction: preprocess, detect outliers,
+correlation analysis, Linear and Random Forest Regression; compare using R2 and RMSE.
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import r2_score, mean_squared_error
+
+df = pd.read_csv("uber.csv")
+
+print(df.head())
+print(df.shape)
+print(df.info())
+
+df.drop(columns=["Unnamed: 0", "key"], inplace=True)
+df.dropna(inplace=True)
+df.drop_duplicates(inplace=True)
+
+df["pickup_datetime"] = pd.to_datetime(
+    df["pickup_datetime"], errors="coerce"
+)
+
+df.dropna(subset=["pickup_datetime"], inplace=True)
+
+df = df[df["fare_amount"] > 0]
+df = df[df["passenger_count"].between(1, 6)]
+
+df = df[
+    df["pickup_latitude"].between(40, 42) &
+    df["dropoff_latitude"].between(40, 42) &
+    df["pickup_longitude"].between(-75, -72) &
+    df["dropoff_longitude"].between(-75, -72)
+]
+
+df["hour"] = df["pickup_datetime"].dt.hour
+df["day"] = df["pickup_datetime"].dt.day
+df["month"] = df["pickup_datetime"].dt.month
+df["weekday"] = df["pickup_datetime"].dt.weekday
+
+def haversine(lat1, lon1, lat2, lon2):
+    lat1, lon1, lat2, lon2 = map(
+        np.radians, [lat1, lon1, lat2, lon2]
+    )
+
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+
+    a = (np.sin(dlat / 2) ** 2 +
+         np.cos(lat1) * np.cos(lat2) *
+         np.sin(dlon / 2) ** 2)
+
+    return 6371 * 2 * np.arcsin(np.sqrt(a))
+
+df["distance"] = haversine(
+    df["pickup_latitude"],
+    df["pickup_longitude"],
+    df["dropoff_latitude"],
+    df["dropoff_longitude"]
+)
+
+df = df[
+    (df["distance"] > 0) &
+    (df["distance"] <= 100)
+]
+
+Q1 = df["fare_amount"].quantile(0.25)
+Q3 = df["fare_amount"].quantile(0.75)
+
+IQR = Q3 - Q1
+
+lower_limit = Q1 - 1.5 * IQR
+upper_limit = Q3 + 1.5 * IQR
+
+df = df[
+    (df["fare_amount"] >= lower_limit) &
+    (df["fare_amount"] <= upper_limit)
+]
+
+features = [
+    "pickup_longitude",
+    "pickup_latitude",
+    "dropoff_longitude",
+    "dropoff_latitude",
+    "passenger_count",
+    "hour",
+    "day",
+    "month",
+    "weekday",
+    "distance"
+]
+
+corr = df[features + ["fare_amount"]].corr()
+
+print(corr)
+
+plt.figure(figsize=(12, 8))
+sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f")
+plt.show()
+
+X = df[features]
+y = df["fare_amount"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+lr = LinearRegression()
+lr.fit(X_train, y_train)
+
+lr_pred = lr.predict(X_test)
+
+lr_r2 = r2_score(y_test, lr_pred)
+lr_rmse = np.sqrt(mean_squared_error(y_test, lr_pred))
+
+print("Linear Regression")
+print("R2 Score:", lr_r2)
+print("RMSE:", lr_rmse)
+
+rf = RandomForestRegressor(
+    n_estimators=100,
+    random_state=42,
+    n_jobs=-1
+)
+
+rf.fit(X_train, y_train)
+
+rf_pred = rf.predict(X_test)
+
+rf_r2 = r2_score(y_test, rf_pred)
+rf_rmse = np.sqrt(mean_squared_error(y_test, rf_pred))
+
+print("Random Forest Regression")
+print("R2 Score:", rf_r2)
+print("RMSE:", rf_rmse)
+
+results = pd.DataFrame({
+    "Model": [
+        "Linear Regression",
+        "Random Forest Regression"
+    ],
+    "R2 Score": [lr_r2, rf_r2],
+    "RMSE": [lr_rmse, rf_rmse]
+})
+
+print(results)
+
+best_model = results.loc[
+    results["RMSE"].idxmin(), "Model"
+]
+
+print("Best Performing Model:", best_model)
+
+results.set_index("Model")[
+    ["R2 Score", "RMSE"]
+].plot(kind="bar", figsize=(9, 5))
+
+plt.title("Model Comparison")
+plt.ylabel("Score")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.show()
+

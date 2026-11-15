@@ -1,0 +1,12 @@
+# Compiled executable files
+*.exe
+
+# Java compiled files
+*.class
+
+# Python cache
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/

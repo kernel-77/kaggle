@@ -1,0 +1,176 @@
+8-Queens: given the first queen's position, use backtracking to place the
+remaining queens
+
+
+import java.util.*;
+
+public class EightQueens {
+
+    static int N = 8;
+    static int[][] board = new int[N][N];
+
+    static boolean isSafe(int row, int col) {
+
+        for (int i = 0; i < row; i++) {
+            if (board[i][col] == 1)
+                return false;
+        }
+
+        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j] == 1)
+                return false;
+        }
+
+        for (int i = row - 1, j = col + 1; i >= 0 && j < N; i--, j++) {
+            if (board[i][j] == 1)
+                return false;
+        }
+
+        return true;
+    }
+
+    static boolean solve(int row) {
+
+        if (row == N)
+            return true;
+
+        for (int col = 0; col < N; col++) {
+
+            if (isSafe(row, col)) {
+
+                board[row][col] = 1;
+
+                if (solve(row + 1))
+                    return true;
+
+                board[row][col] = 0;
+            }
+        }
+
+        return false;
+    }
+
+    static void printBoard() {
+
+        System.out.println("\nChessboard:");
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (board[i][j] == 1)
+                    System.out.print(" Q ");
+                else
+                    System.out.print(" . ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter first queen position (row and column from 1 to 8):");
+
+        System.out.print("Row: ");
+        int row = sc.nextInt() - 1;
+
+        System.out.print("Column: ");
+        int col = sc.nextInt() - 1;
+
+        if (row < 0 || row >= N || col < 0 || col >= N) {
+            System.out.println("Invalid position!");
+        } else {
+
+            board[row][col] = 1;
+
+            if (solve(row + 1)) {
+                System.out.println("\nSolution found!");
+                printBoard();
+            } else {
+                System.out.println("\nNo solution exists for this position.");
+            }
+        }
+
+        sc.close();
+    }
+}
+
+-----------------------------------------------------------------------------------------
+
+Diabetes Prediction using KNN on diabetes.csv;
+confusion matrix, accuracy, error rate, precision, recall.
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import (
+    confusion_matrix,
+    accuracy_score,
+    precision_score,
+    recall_score,
+    classification_report
+)
+
+df = pd.read_csv("diabetes(1).csv")
+
+print("Dataset Shape:", df.shape)
+print(df.head())
+
+X = df.drop("Outcome", axis=1)
+y = df["Outcome"]
+
+zero_columns = ["Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI"]
+X[zero_columns] = X[zero_columns].replace(0, np.nan)
+
+imputer = SimpleImputer(strategy="median")
+X = pd.DataFrame(imputer.fit_transform(X), columns=X.columns)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
+)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+knn = KNeighborsClassifier(n_neighbors=5)
+
+knn.fit(X_train, y_train)
+
+y_pred = knn.predict(X_test)
+
+cm = confusion_matrix(y_test, y_pred)
+
+accuracy = accuracy_score(y_test, y_pred)
+error_rate = 1 - accuracy
+precision = precision_score(y_test, y_pred, zero_division=0)
+recall = recall_score(y_test, y_pred, zero_division=0)
+
+print("\nConfusion Matrix:")
+print(cm)
+
+print("\nAccuracy:", accuracy * 100, "%")
+print("Error Rate:", error_rate * 100, "%")
+print("Precision:", precision)
+print("Recall:", recall)
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred, zero_division=0))
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+
+plt.title("Confusion Matrix - KNN")
+plt.xlabel("Predicted Values")
+plt.ylabel("Actual Values")
+plt.show()

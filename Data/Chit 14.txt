@@ -1,0 +1,154 @@
+Design and implement a greedy algorithm for the Fractional Knapsack problem
+
+import java.util.*;
+
+class Item {
+    int weight;
+    int profit;
+    double ratio;
+
+    Item(int weight, int profit) {
+        this.weight = weight;
+        this.profit = profit;
+        this.ratio = (double) profit / weight;
+    }
+}
+
+public class FractionalKnapsack {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of items: ");
+        int n = sc.nextInt();
+
+        Item[] items = new Item[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.println("\nEnter details of Item " + (i + 1));
+
+            System.out.print("Enter weight: ");
+            int weight = sc.nextInt();
+
+            System.out.print("Enter profit: ");
+            int profit = sc.nextInt();
+
+            items[i] = new Item(weight, profit);
+        }
+
+        System.out.print("\nEnter knapsack capacity: ");
+        int capacity = sc.nextInt();
+
+        Arrays.sort(items, (a, b) -> Double.compare(b.ratio, a.ratio));
+
+        double totalProfit = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            if (capacity == 0) {
+                break;
+            }
+
+            if (items[i].weight <= capacity) {
+                capacity -= items[i].weight;
+                totalProfit += items[i].profit;
+
+                System.out.println("Selected full item: Weight = "
+                        + items[i].weight + ", Profit = " + items[i].profit);
+            } else {
+                double fraction = (double) capacity / items[i].weight;
+
+                totalProfit += items[i].profit * fraction;
+
+                System.out.println("Selected fraction: " + fraction
+                        + ", Weight = " + capacity);
+
+                capacity = 0;
+            }
+        }
+
+        System.out.println("\nMaximum Profit = " + totalProfit);
+
+        sc.close();
+    }
+}
+
+----------------------------------------------------------------------------------------
+Diabetes Prediction using KNN on diabetes.csv;
+confusion matrix, accuracy, error rate, precision, recall.
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import (
+    confusion_matrix,
+    accuracy_score,
+    precision_score,
+    recall_score,
+    classification_report
+)
+
+df = pd.read_csv("diabetes(1).csv")
+
+print("Dataset Shape:", df.shape)
+print(df.head())
+
+X = df.drop("Outcome", axis=1)
+y = df["Outcome"]
+
+zero_columns = ["Glucose", "BloodPressure", "SkinThickness", "Insulin", "BMI"]
+X[zero_columns] = X[zero_columns].replace(0, np.nan)
+
+imputer = SimpleImputer(strategy="median")
+X = pd.DataFrame(imputer.fit_transform(X), columns=X.columns)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
+)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+knn = KNeighborsClassifier(n_neighbors=5)
+
+knn.fit(X_train, y_train)
+
+y_pred = knn.predict(X_test)
+
+cm = confusion_matrix(y_test, y_pred)
+
+accuracy = accuracy_score(y_test, y_pred)
+error_rate = 1 - accuracy
+precision = precision_score(y_test, y_pred, zero_division=0)
+recall = recall_score(y_test, y_pred, zero_division=0)
+
+print("\nConfusion Matrix:")
+print(cm)
+
+print("\nAccuracy:", accuracy * 100, "%")
+print("Error Rate:", error_rate * 100, "%")
+print("Precision:", precision)
+print("Recall:", recall)
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred, zero_division=0))
+
+plt.figure(figsize=(6, 4))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+
+plt.title("Confusion Matrix - KNN")
+plt.xlabel("Predicted Values")
+plt.ylabel("Actual Values")
+plt.show()
